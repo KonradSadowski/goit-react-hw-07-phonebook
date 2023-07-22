@@ -1,30 +1,37 @@
-// ContactList.jsx
-
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/store';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchContacts, deleteContact } from '../../redux/store';
 
 const ContactList = () => {
-  const contacts = useSelector(state => state.contacts);
-  const filter = useSelector(state => state.filter);
   const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts);
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
-  const handleDelete = id => {
-    dispatch(deleteContact(id));
+  const handleDelete = async id => {
+    try {
+      await dispatch(deleteContact(id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <ul>
-      {filteredContacts.map(contact => (
-        <li key={contact.id}>
-          {contact.name}: {contact.number}
-          <button onClick={() => handleDelete(contact.id)}>Delete</button>
-        </li>
-      ))}
+      {contacts.length > 0 ? (
+        contacts.map(contact => (
+          <li key={contact.phone || contact.id}>
+            {contact.name}: {contact.phone}
+            <button type="button" onClick={() => handleDelete(contact.id)}>
+              Delete
+            </button>
+          </li>
+        ))
+      ) : (
+        <li>No contacts found.</li>
+      )}
     </ul>
   );
 };

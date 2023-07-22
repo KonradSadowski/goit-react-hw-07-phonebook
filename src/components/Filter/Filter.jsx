@@ -1,5 +1,3 @@
-// Filter.jsx
-
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilter } from '../../redux/store';
@@ -19,5 +17,4 @@ const Filter = () => {
     </label>
   );
 };
-
 export default Filter;

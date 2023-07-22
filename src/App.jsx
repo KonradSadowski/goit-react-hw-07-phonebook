@@ -1,24 +1,17 @@
-// App.jsx
-
 import React, { useEffect } from 'react';
-import { Provider, useSelector, useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import ContactForm from './components/ContactForm/ContactForm';
 import ContactList from './components/ContactList/ContactList';
 import Filter from './components/Filter/Filter';
-import store, { loadContactsFromLocalStorage } from './redux/store';
+import store, { fetchContacts } from './redux/store';
 import css from './App.module.css';
 
 const App = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts);
 
   useEffect(() => {
-    dispatch(loadContactsFromLocalStorage());
+    dispatch(fetchContacts());
   }, [dispatch]);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   return (
     <Provider store={store}>
